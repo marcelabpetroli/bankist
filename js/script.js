@@ -72,29 +72,26 @@ const displayMovements = (movements) => {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-displayMovements(account1.movements);
 
 const calcDisplayBalance = (movements) => {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${balance} €`;
 };
-calcDisplayBalance(account1.movements);
 
-const calcDisplaySummary = (movements) => {
-  const incomes = movements.filter((mov) => mov > 0).reduce((acc, mov) => acc + mov, 0);
+const calcDisplaySummary = (acc) => {
+  const incomes = acc.movements.filter((mov) => mov > 0).reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${incomes} €`;
 
-  const out = movements.filter((mov) => mov < 0).reduce((acc, mov) => acc + mov, 0);
+  const out = acc.movements.filter((mov) => mov < 0).reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(out)} €`;
 
-  const interest = movements
+  const interest = acc.movements
     .filter((mov) => mov > 0)
-    .map((deposit) => (deposit * 1.2) / 100)
+    .map((deposit) => (deposit * acc.interestRate) / 100)
     .filter((int) => int >= 1)
     .reduce((acc, int) => acc + int, 0);
   labelSumInterest.textContent = `${interest} €`;
 };
-calcDisplaySummary(account1.movements);
 
 const createUserName = (accs) => {
   accs.forEach((acc) => {
@@ -127,6 +124,6 @@ btnLogin.addEventListener('click', (e) => {
 
     calcDisplayBalance(currentAccount.movements);
 
-    calcDisplaySummary(currentAccount.movements);
+    calcDisplaySummary(currentAccount);
   }
 });
