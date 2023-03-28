@@ -129,7 +129,7 @@ btnLogin.addEventListener('click', (e) => {
 
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
-    inputClosePin.blur();
+    inputLoginPin.blur();
 
     // Update UI
     updateUI(currentAccount);
@@ -151,4 +151,23 @@ btnTransfer.addEventListener('click', (e) => {
     // Update UI
     updateUI(currentAccount);
   }
+});
+
+btnClose.addEventListener('click', (e) => {
+  e.preventDefault();
+
+  if (currentAccount.username === inputCloseUsername.value && currentAccount.pin === Number(inputClosePin.value)) {
+    const index = accounts.findIndex((acc) => acc.username === currentAccount.username);
+
+    // Delete account
+    accounts.splice(index, 1);
+
+    // Hide UI
+    containerApp.style.opacity = 0;
+  }
+
+  // Clear input fields
+  labelWelcome.textContent = `Log in to get started`;
+  inputCloseUsername.value = inputClosePin.value = '';
+  inputClosePin.blur();
 });
