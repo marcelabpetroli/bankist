@@ -57,9 +57,24 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = (movements) => {
+const createUserName = (accs) => {
+  accs.forEach((acc) => {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map((name) => name.charAt(0))
+      .join('');
+  });
+};
+createUserName(accounts);
+
+const displayMovements = (movements, sort = false) => {
   containerMovements.innerHTML = '';
-  movements.forEach((mov, i) => {
+
+  // Create a copy of movements to sort it
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach((mov, i) => {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
@@ -93,17 +108,6 @@ const calcDisplaySummary = (acc) => {
     .reduce((acc, int) => acc + int, 0);
   labelSumInterest.textContent = `${interest} €`;
 };
-
-const createUserName = (accs) => {
-  accs.forEach((acc) => {
-    acc.username = acc.owner
-      .toLowerCase()
-      .split(' ')
-      .map((name) => name.charAt(0))
-      .join('');
-  });
-};
-createUserName(accounts);
 
 const updateUI = (acc) => {
   // Display movements
@@ -187,4 +191,15 @@ btnClose.addEventListener('click', (e) => {
   labelWelcome.textContent = `Log in to get started`;
   inputCloseUsername.value = inputClosePin.value = '';
   inputClosePin.blur();
+});
+
+btnSort.addEventListener('click', (e) => {
+  e.preventDefault();
+});
+
+let sorted = false;
+btnSort.addEventListener('click', (e) => {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
 });
