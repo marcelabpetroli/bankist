@@ -126,7 +126,7 @@ btnLogin.addEventListener('click', (e) => {
 
   currentAccount = accounts.find((acc) => acc.username === inputLoginUsername.value);
 
-  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+  if (currentAccount?.pin === +inputLoginPin.value) {
     // Display UI and message
     labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
     containerApp.style.opacity = 100;
@@ -142,7 +142,7 @@ btnLogin.addEventListener('click', (e) => {
 
 btnTransfer.addEventListener('click', (e) => {
   e.preventDefault();
-  const amount = Number(inputTransferAmount.value);
+  const amount = +inputTransferAmount.value;
   const receiverAcc = accounts.find((acc) => acc.username === inputTransferTo.value);
 
   inputTransferAmount.value = inputTransferTo.value = '';
@@ -160,7 +160,7 @@ btnTransfer.addEventListener('click', (e) => {
 btnLoan.addEventListener('click', (e) => {
   e.preventDefault();
 
-  const amount = Number(inputLoanAmount.value);
+  const amount = +inputLoanAmount.value;
 
   if (amount > 0 && currentAccount.movements.some((mov) => mov >= amount / 10)) {
     // Add movement
@@ -177,7 +177,7 @@ btnLoan.addEventListener('click', (e) => {
 btnClose.addEventListener('click', (e) => {
   e.preventDefault();
 
-  if (currentAccount.username === inputCloseUsername.value && currentAccount.pin === Number(inputClosePin.value)) {
+  if (currentAccount.username === inputCloseUsername.value && currentAccount.pin === +inputClosePin.value) {
     const index = accounts.findIndex((acc) => acc.username === currentAccount.username);
 
     // Delete account
